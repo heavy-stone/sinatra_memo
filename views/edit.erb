@@ -1,0 +1,6 @@
+<form method="post" action="/memos/<%= @memo[:public_id]%>" >
+  <input type="hidden" name="_method" value="patch" />
+  <input type="text" name="title" value=<%= @memo[:title] %>  />
+  <textarea name="content"><%= @memo[:content] %></textarea>
+  <input type="submit" value="変更" />
+</form>

@@ -1,0 +1,9 @@
+<%= @memo[:title] %>
+<%= @memo[:content] %>
+
+<a href="/memos/<%= @memo[:public_id] %>/edit">変更</a>
+
+<form method="post" action="/memos/<%= @memo[:public_id]%>" onsubmit="return confirm('本当に削除しますか？');">
+  <input type="hidden" name="_method" value="delete" />
+  <input type="submit" value="削除" />
+</form>
