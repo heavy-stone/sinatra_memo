@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'rackup'
 gem 'sinatra'
+gem 'sinatra-contrib'
 
 group :development do
   gem 'erb_lint', require: false
