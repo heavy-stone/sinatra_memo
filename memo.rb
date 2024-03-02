@@ -39,7 +39,7 @@ end
 
 patch '/memos/:public_id' do
   @memos = read_memos_table
-  @memos[params[:public_id].to_sym] = { public_id: params[:public_id].to_sym, title: params[:title], content: params[:content] }
+  @memos[params[:public_id].to_sym] = { public_id: params[:public_id], title: params[:title], content: params[:content] }
   write_memos_table(@memos)
 
   redirect "/memos/#{params[:public_id]}"
@@ -60,7 +60,7 @@ not_found do
 end
 
 def read_memos_table
-  File.open('./db/memos.json') do |file|
+  File.open(db_path) do |file|
     JSON.parse(file.read, symbolize_names: true)
   end
 end
@@ -73,7 +73,11 @@ def find_memo(public_id)
 end
 
 def write_memos_table(memos)
-  File.open('./db/memos.json', 'w') do |file|
+  File.open(db_path, 'w') do |file|
     JSON.dump(memos, file)
   end
+end
+
+def db_path
+  './db/memos.json'
 end
