@@ -81,3 +81,9 @@ end
 def db_path
   './db/memos.json'
 end
+
+helpers do
+  def nl2br(str)
+    str.gsub(/\R/, '<br>')
+  end
+end
