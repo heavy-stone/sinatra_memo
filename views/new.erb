@@ -1,5 +1,11 @@
-<form method="post" action="/memos">
-  <input type="text" name="title" placeholder="タイトル" />
-  <textarea name="content" placeholder="内容"></textarea>
-  <input type="submit" value="保存" />
+<form method="post" action="/memos" class="mx-auto grid max-w-screen-md gap-4 grid-cols-1">
+  <div>
+    <input name="title" placeholder="タイトル" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+  </div>
+  <div>
+    <textarea name="content" placeholder="内容" class="h-64 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"></textarea>
+  </div>
+  <div>
+    <input type="submit" value="保存" class="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" />
+  </div>
 </form>
