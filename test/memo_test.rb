@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
-ENV['APP_ENV'] = 'test'
-
 require 'minitest/autorun'
 require 'minitest/stub_any_instance'
 require 'rack/test'
+require_relative 'constants'
 require_relative '../memo'
-
-DB_PATH_METHOD = :db_path
-TEST_DB_PATH = './db/memos_test.json'
 
 class MemoTest < Minitest::Test
   include Rack::Test::Methods
