@@ -31,7 +31,7 @@ class MemoTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    MemoTest.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
+    self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
       write_memos_table(memos)
     end
   end
@@ -107,7 +107,7 @@ class MemoTest < Minitest::Test
     app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
       SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
         post '/memos', { title: 'test c title', content: 'test c content' }
-        MemoTest.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
+        self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
           actual = read_memos_table
           assert_equal expected, actual
           assert last_response.status, 302
@@ -131,7 +131,7 @@ class MemoTest < Minitest::Test
     }
     app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
       patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: 'updated test a title', content: 'updated test a content' }
-      MemoTest.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
+      self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
         actual = read_memos_table
         assert_equal expected, actual
         assert last_response.status, 302
@@ -149,7 +149,7 @@ class MemoTest < Minitest::Test
     }
     app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
       delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
-      MemoTest.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
+      self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
         actual = read_memos_table
         assert_equal expected, actual
         assert last_response.status, 302
