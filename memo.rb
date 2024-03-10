@@ -60,6 +60,7 @@ not_found do
 end
 
 def read_memos_table
+  init_db_file
   File.open(db_path) do |file|
     JSON.parse(file.read, symbolize_names: true)
   end
@@ -73,13 +74,23 @@ def find_memo(public_id)
 end
 
 def write_memos_table(memos)
+  init_db_file
   File.open(db_path, 'w') do |file|
     JSON.dump(memos, file)
   end
 end
 
 def db_path
-  './db/memos.json'
+  db_file = ENV['APP_ENV'] == 'test' ? 'memos_test.json' : 'memos.json'
+  "./db/#{db_file}"
+end
+
+def init_db_file
+  return if File.exist?(db_path)
+
+  File.open(db_path, 'w') do |file|
+    JSON.dump({}, file)
+  end
 end
 
 helpers do
