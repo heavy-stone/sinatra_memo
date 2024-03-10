@@ -27,9 +27,7 @@ class XssTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      write_memos_table(memos)
-    end
+    write_memos_table(memos)
   end
 
   def test_create
@@ -50,17 +48,13 @@ class XssTest < Minitest::Test
         "content": '&lt;script&gt;alert(&#39;content&#39;)&lt;/script&gt;'
       }
     }
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
-        xss_title = '<script>alert(\'title\')</script>'
-        xss_content = '<script>alert(\'content\')</script>'
-        post '/memos', { title: xss_title, content: xss_content }
-        self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-          actual = read_memos_table
-          assert_equal expected, actual
-          assert last_response.status, 302
-        end
-      end
+    SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
+      xss_title = '<script>alert(\'title\')</script>'
+      xss_content = '<script>alert(\'content\')</script>'
+      post '/memos', { title: xss_title, content: xss_content }
+      actual = read_memos_table
+      assert_equal expected, actual
+      assert last_response.status, 302
     end
   end
 
@@ -77,15 +71,11 @@ class XssTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      xss_title = '<script>alert(\'title\')</script>'
-      xss_content = '<script>alert(\'content\')</script>'
-      patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: xss_title, content: xss_content }
-      self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-        actual = read_memos_table
-        assert_equal expected, actual
-        assert last_response.status, 302
-      end
-    end
+    xss_title = '<script>alert(\'title\')</script>'
+    xss_content = '<script>alert(\'content\')</script>'
+    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: xss_title, content: xss_content }
+    actual = read_memos_table
+    assert_equal expected, actual
+    assert last_response.status, 302
   end
 end

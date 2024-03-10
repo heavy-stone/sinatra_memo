@@ -27,59 +27,47 @@ class MemoTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      write_memos_table(memos)
-    end
+    write_memos_table(memos)
   end
 
   def test_index
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      get '/memos'
-      assert last_response.ok?
-      assert last_response.body.include?('test a title')
-      assert last_response.body.include?('test b title')
-      assert last_response.body.include?('追加')
-    end
+    get '/memos'
+    assert last_response.ok?
+    assert last_response.body.include?('test a title')
+    assert last_response.body.include?('test b title')
+    assert last_response.body.include?('追加')
   end
 
   def test_new
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      get '/memos/new', name: 'Frank'
-      assert last_response.status, 200
-      assert last_response.body.include?('保存')
-    end
+    get '/memos/new', name: 'Frank'
+    assert last_response.status, 200
+    assert last_response.body.include?('保存')
   end
 
   def test_show
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      get '/memos/b716320e-99d4-4050-bbf7-3c9b26a64665'
-      assert last_response.status, 200
-      assert last_response.body.include?('test b title')
-      assert last_response.body.include?('test b content')
-      assert last_response.body.include?('変更')
-      assert last_response.body.include?('削除')
-    end
+    get '/memos/b716320e-99d4-4050-bbf7-3c9b26a64665'
+    assert last_response.status, 200
+    assert last_response.body.include?('test b title')
+    assert last_response.body.include?('test b content')
+    assert last_response.body.include?('変更')
+    assert last_response.body.include?('削除')
   end
 
   def test_edit
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      get '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96/edit'
-      assert last_response.body.include?('test a title')
-      assert last_response.body.include?('test a content')
-      assert last_response.body.include?('変更')
-    end
+    get '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96/edit'
+    assert last_response.body.include?('test a title')
+    assert last_response.body.include?('test a content')
+    assert last_response.body.include?('変更')
   end
 
   def test_not_found
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      get '/'
-      assert last_response.body.include?('404 Not Found のページです')
-      get '/memos/aaa'
-      get '/not_found'
-      assert last_response.body.include?('404 Not Found のページです')
-      get '/memos/aaa/edit'
-      assert last_response.body.include?('404 Not Found のページです')
-    end
+    get '/'
+    assert last_response.body.include?('404 Not Found のページです')
+    get '/memos/aaa'
+    get '/not_found'
+    assert last_response.body.include?('404 Not Found のページです')
+    get '/memos/aaa/edit'
+    assert last_response.body.include?('404 Not Found のページです')
   end
 
   def test_create
@@ -100,15 +88,11 @@ class MemoTest < Minitest::Test
         "content": 'test c content'
       }
     }
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
-        post '/memos', { title: 'test c title', content: 'test c content' }
-        self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-          actual = read_memos_table
-          assert_equal expected, actual
-          assert last_response.status, 302
-        end
-      end
+    SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
+      post '/memos', { title: 'test c title', content: 'test c content' }
+      actual = read_memos_table
+      assert_equal expected, actual
+      assert last_response.status, 302
     end
   end
 
@@ -125,14 +109,10 @@ class MemoTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: 'updated test a title', content: 'updated test a content' }
-      self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-        actual = read_memos_table
-        assert_equal expected, actual
-        assert last_response.status, 302
-      end
-    end
+    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: 'updated test a title', content: 'updated test a content' }
+    actual = read_memos_table
+    assert_equal expected, actual
+    assert last_response.status, 302
   end
 
   def test_delete
@@ -143,13 +123,9 @@ class MemoTest < Minitest::Test
         "content": 'test b content'
       }
     }
-    app.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-      delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
-      self.class.stub_any_instance(DB_PATH_METHOD, TEST_DB_PATH) do
-        actual = read_memos_table
-        assert_equal expected, actual
-        assert last_response.status, 302
-      end
-    end
+    delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
+    actual = read_memos_table
+    assert_equal expected, actual
+    assert last_response.status, 302
   end
 end
