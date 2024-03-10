@@ -44,8 +44,8 @@ class XssTest < Minitest::Test
       },
       "c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": '&lt;script&gt;alert(&#39;title&#39;)&lt;/script&gt;',
-        "content": '&lt;script&gt;alert(&#39;content&#39;)&lt;/script&gt;'
+        "title": '<script>alert(\'title\')</script>',
+        "content": '<script>alert(\'content\')</script>'
       }
     }
     SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
@@ -62,8 +62,8 @@ class XssTest < Minitest::Test
     expected = {
       "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": '&lt;script&gt;alert(&#39;title&#39;)&lt;/script&gt;',
-        "content": '&lt;script&gt;alert(&#39;content&#39;)&lt;/script&gt;'
+        "title": '<script>alert(\'title\')</script>',
+        "content": '<script>alert(\'content\')</script>'
       },
       "b716320e-99d4-4050-bbf7-3c9b26a64665": {
         "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
