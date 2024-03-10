@@ -22,7 +22,6 @@ post '/memos' do
   write_memos_table(@memos)
 
   redirect "/memos/#{public_id}"
-  erb :show
 end
 
 get '/memos/:public_id' do
@@ -43,7 +42,6 @@ patch '/memos/:public_id' do
   write_memos_table(@memos)
 
   redirect "/memos/#{params[:public_id]}"
-  erb :show
 end
 
 delete '/memos/:public_id' do
@@ -52,7 +50,6 @@ delete '/memos/:public_id' do
   write_memos_table(@memos)
 
   redirect '/memos'
-  erb :index
 end
 
 not_found do
