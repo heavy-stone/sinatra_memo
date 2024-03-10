@@ -65,9 +65,10 @@ end
 
 def find_memo(public_id)
   memos = read_memos_table
-  return not_found if memos[public_id.to_sym].nil?
+  memo = memos[public_id.to_sym]
+  return not_found if memo.nil?
 
-  memos[public_id.to_sym]
+  memo
 end
 
 def write_memos_table(memos)
