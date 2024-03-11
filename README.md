@@ -29,7 +29,7 @@ $ bundle exec erblint --lint-all
 ```
 テストの実行方法
 ```
-$ rake # 一括テスト
+$ bundle exec rake # 一括テスト
 $ bundle exec ruby test/memo_test.rb # ファイル毎のテスト
 $ bundle exec ruby test/memo_test.rb -n test_index # testメソッド毎のテスト
 ```
