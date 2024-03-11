@@ -15,66 +15,35 @@ class XssTest < Minitest::Test
   def setup
     File.exist?('./db/memos_test.json') && File.delete('./db/memos_test.json')
     memos = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'test a title',
-        "content": 'test a content'
-      },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
+      "c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96": {
+        "public_id": 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96',
+        "title": '<script>alert(\'タイトル\')</script>',
+        "content": '<script>alert(\'内容\')</script>'
       }
     }
     write_memos_table(memos)
   end
 
-  def test_create
-    expected = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'test a title',
-        "content": 'test a content'
-      },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
-      },
-      "c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": '<script>alert(\'title\')</script>',
-        "content": '<script>alert(\'content\')</script>'
-      }
-    }
-    SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
-      xss_title = '<script>alert(\'title\')</script>'
-      xss_content = '<script>alert(\'content\')</script>'
-      post '/memos', { title: xss_title, content: xss_content }
-      actual = read_memos_table
-      assert_equal expected, actual
-      assert last_response.status, 302
-    end
+  def test_index
+    get '/memos'
+    assert last_response.ok?
+    assert last_response.body.include?('&lt;script&gt;alert(&#39;タイトル&#39;)&lt;/script&gt;')
+    assert last_response.body.include?('追加')
   end
 
-  def test_update
-    expected = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": '<script>alert(\'title\')</script>',
-        "content": '<script>alert(\'content\')</script>'
-      },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
-      }
-    }
-    xss_title = '<script>alert(\'title\')</script>'
-    xss_content = '<script>alert(\'content\')</script>'
-    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: xss_title, content: xss_content }
-    actual = read_memos_table
-    assert_equal expected, actual
-    assert last_response.status, 302
+  def test_show
+    get '/memos/c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96'
+    assert last_response.status, 200
+    assert last_response.body.include?('&lt;script&gt;alert(&#39;タイトル&#39;)&lt;/script&gt;')
+    assert last_response.body.include?('&lt;script&gt;alert(&#39;内容&#39;)&lt;/script&gt;')
+    assert last_response.body.include?('変更')
+    assert last_response.body.include?('削除')
+  end
+
+  def test_edit
+    get '/memos/c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96/edit'
+    assert last_response.body.include?('<script>alert(\'タイトル\')</script>')
+    assert last_response.body.include?('<script>alert(\'内容\')</script>')
+    assert last_response.body.include?('変更')
   end
 end
