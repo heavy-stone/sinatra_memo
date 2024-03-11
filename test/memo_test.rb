@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require 'minitest/stub_any_instance'
 require 'rack/test'
 require_relative 'constants'
 require_relative '../memo'
