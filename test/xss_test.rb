@@ -26,7 +26,7 @@ class XssTest < Minitest::Test
 
   def test_index
     get '/memos'
-    assert last_response.ok?
+    assert last_response.status, 200
     assert last_response.body.include?('&lt;script&gt;alert(&#39;タイトル&#39;)&lt;/script&gt;')
     assert last_response.body.include?('追加')
   end

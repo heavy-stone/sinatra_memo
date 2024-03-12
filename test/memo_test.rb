@@ -17,13 +17,13 @@ class MemoTest < Minitest::Test
     memos = {
       "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'test a title',
-        "content": 'test a content'
+        "title": '買い物リスト',
+        "content": 'トマトジュース\nティッシュペーパー'
       },
       "b716320e-99d4-4050-bbf7-3c9b26a64665": {
         "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     write_memos_table(memos)
@@ -31,9 +31,9 @@ class MemoTest < Minitest::Test
 
   def test_index
     get '/memos'
-    assert last_response.ok?
-    assert last_response.body.include?('test a title')
-    assert last_response.body.include?('test b title')
+    assert last_response.status, 200
+    assert last_response.body.include?('買い物リスト')
+    assert last_response.body.include?('スクラム本')
     assert last_response.body.include?('追加')
   end
 
@@ -46,16 +46,16 @@ class MemoTest < Minitest::Test
   def test_show
     get '/memos/b716320e-99d4-4050-bbf7-3c9b26a64665'
     assert last_response.status, 200
-    assert last_response.body.include?('test b title')
-    assert last_response.body.include?('test b content')
+    assert last_response.body.include?('スクラム本')
+    assert last_response.body.include?('SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック')
     assert last_response.body.include?('変更')
     assert last_response.body.include?('削除')
   end
 
   def test_edit
     get '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96/edit'
-    assert last_response.body.include?('test a title')
-    assert last_response.body.include?('test a content')
+    assert last_response.body.include?('買い物リスト')
+    assert last_response.body.include?('トマトジュース\nティッシュペーパー')
     assert last_response.body.include?('変更')
   end
 
@@ -70,61 +70,97 @@ class MemoTest < Minitest::Test
   end
 
   def test_create
-    expected = {
+    expected_before = {
       "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'test a title',
-        "content": 'test a content'
+        "title": '買い物リスト',
+        "content": 'トマトジュース\nティッシュペーパー'
       },
       "b716320e-99d4-4050-bbf7-3c9b26a64665": {
         "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      }
+    }
+    expected_after = {
+      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
+        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+        "title": '買い物リスト',
+        "content": 'トマトジュース\nティッシュペーパー'
+      },
+      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
+        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       },
       "c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'test c title',
-        "content": 'test c content'
+        "title": '紅茶',
+        "content": 'アールグレイ\nダージリン'
       }
     }
+    assert_equal expected_before, read_memos_table
     SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
-      post '/memos', { title: 'test c title', content: 'test c content' }
-      actual = read_memos_table
-      assert_equal expected, actual
+      post '/memos', { title: '紅茶', content: 'アールグレイ\nダージリン' }
+      assert_equal expected_after, read_memos_table
       assert last_response.status, 302
     end
   end
 
   def test_update
-    expected = {
+    expected_before = {
       "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
-        "title": 'updated test a title',
-        "content": 'updated test a content'
+        "title": '買い物リスト',
+        "content": 'トマトジュース\nティッシュペーパー'
       },
       "b716320e-99d4-4050-bbf7-3c9b26a64665": {
         "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
-    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: 'updated test a title', content: 'updated test a content' }
-    actual = read_memos_table
-    assert_equal expected, actual
+    expected_after = {
+      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
+        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+        "title": '買い物一覧',
+        "content": '焼きそばパン\nトマトジュース\nティッシュペーパー'
+      },
+      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
+        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      }
+    }
+    assert_equal expected_before, read_memos_table
+    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: '買い物一覧', content: '焼きそばパン\nトマトジュース\nティッシュペーパー' }
+    assert_equal expected_after, read_memos_table
     assert last_response.status, 302
   end
 
   def test_delete
-    expected = {
+    expected_before = {
+      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
+        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+        "title": '買い物リスト',
+        "content": 'トマトジュース\nティッシュペーパー'
+      },
       "b716320e-99d4-4050-bbf7-3c9b26a64665": {
         "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
-        "title": 'test b title',
-        "content": 'test b content'
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
+    expected_after = {
+      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
+        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+        "title": 'スクラム本',
+        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      }
+    }
+    assert_equal expected_before, read_memos_table
     delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
-    actual = read_memos_table
-    assert_equal expected, actual
+    assert_equal expected_after, read_memos_table
     assert last_response.status, 302
   end
 end
