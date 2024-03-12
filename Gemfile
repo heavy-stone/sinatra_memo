@@ -6,7 +6,7 @@ gem 'rackup'
 gem 'sinatra'
 gem 'sinatra-contrib'
 
-group :development do
+group :development, :test do
   gem 'erb_lint', require: false
   gem 'minitest'
   gem 'rack-test'
