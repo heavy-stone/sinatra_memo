@@ -16,10 +16,10 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  @memos = read_memos
+  memos = read_memos
   public_id = SecureRandom.uuid
-  @memos[public_id] = { public_id:, title: params[:title], content: params[:content] }
-  write_memos(@memos)
+  memos[public_id] = { public_id:, title: params[:title], content: params[:content] }
+  write_memos(memos)
 
   redirect "/memos/#{public_id}"
 end
@@ -37,17 +37,17 @@ get '/memos/:public_id/edit' do
 end
 
 patch '/memos/:public_id' do
-  @memos = read_memos
-  @memos[params[:public_id].to_sym] = { public_id: params[:public_id], title: params[:title], content: params[:content] }
-  write_memos(@memos)
+  memos = read_memos
+  memos[params[:public_id].to_sym] = { public_id: params[:public_id], title: params[:title], content: params[:content] }
+  write_memos(memos)
 
   redirect "/memos/#{params[:public_id]}"
 end
 
 delete '/memos/:public_id' do
-  @memos = read_memos
-  @memos.delete(params[:public_id].to_sym)
-  write_memos(@memos)
+  memos = read_memos
+  memos.delete(params[:public_id].to_sym)
+  write_memos(memos)
 
   redirect '/memos'
 end
