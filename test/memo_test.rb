@@ -15,13 +15,13 @@ class MemoTest < Minitest::Test
   def setup
     File.delete(TEST_DB_PATH) if File.exist?(TEST_DB_PATH)
     memos = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物リスト',
         "content": 'トマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
@@ -44,7 +44,7 @@ class MemoTest < Minitest::Test
   end
 
   def test_show
-    get '/memos/b716320e-99d4-4050-bbf7-3c9b26a64665'
+    get '/memos/test-uuid-2'
     assert last_response.status, 200
     assert_includes last_response.body, 'スクラム本'
     assert_includes last_response.body, 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
@@ -53,7 +53,7 @@ class MemoTest < Minitest::Test
   end
 
   def test_edit
-    get '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96/edit'
+    get '/memos/test-uuid-1/edit'
     assert_includes last_response.body, '買い物リスト'
     assert_includes last_response.body, 'トマトジュース\nティッシュペーパー'
     assert_includes last_response.body, '変更'
@@ -71,25 +71,25 @@ class MemoTest < Minitest::Test
 
   def test_create
     expected_before = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物リスト',
         "content": 'トマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物リスト',
         "content": 'トマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       },
@@ -109,57 +109,57 @@ class MemoTest < Minitest::Test
 
   def test_update
     expected_before = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物リスト',
         "content": 'トマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物一覧',
         "content": '焼きそばパン\nトマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     assert_equal expected_before, read_memos
-    patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: '買い物一覧', content: '焼きそばパン\nトマトジュース\nティッシュペーパー' }
+    patch '/memos/test-uuid-1', { title: '買い物一覧', content: '焼きそばパン\nトマトジュース\nティッシュペーパー' }
     assert_equal expected_after, read_memos
     assert last_response.status, 302
   end
 
   def test_delete
     expected_before = {
-      "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
+      "test-uuid-1": {
+        "public_id": 'test-uuid-1',
         "title": '買い物リスト',
         "content": 'トマトジュース\nティッシュペーパー'
       },
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "b716320e-99d4-4050-bbf7-3c9b26a64665": {
-        "public_id": 'b716320e-99d4-4050-bbf7-3c9b26a64665',
+      "test-uuid-2": {
+        "public_id": 'test-uuid-2',
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     assert_equal expected_before, read_memos
-    delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
+    delete '/memos/test-uuid-1'
     assert_equal expected_after, read_memos
     assert last_response.status, 302
   end
