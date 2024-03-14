@@ -13,7 +13,7 @@ class MemoTest < Minitest::Test
   end
 
   def setup
-    File.exist?('./db/memos_test.json') && File.delete('./db/memos_test.json')
+    File.delete(TEST_DB_PATH) if File.exist?(TEST_DB_PATH)
     memos = {
       "a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96": {
         "public_id": 'a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96',
