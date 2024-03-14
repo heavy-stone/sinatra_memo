@@ -93,14 +93,14 @@ class MemoTest < Minitest::Test
         "title": 'スクラム本',
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       },
-      "c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96": {
-        "public_id": 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96',
+      "new-uuid": {
+        "public_id": 'new-uuid',
         "title": '紅茶',
         "content": 'アールグレイ\nダージリン'
       }
     }
     assert_equal expected_before, read_memos
-    SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
+    SecureRandom.stub(:uuid, 'new-uuid') do
       post '/memos', { title: '紅茶', content: 'アールグレイ\nダージリン' }
       assert_equal expected_after, read_memos
       assert last_response.status, 302
