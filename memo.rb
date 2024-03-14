@@ -57,7 +57,6 @@ not_found do
 end
 
 def read_memos_table
-  init_db_file
   File.open(db_path) do |file|
     JSON.parse(file.read, symbolize_names: true)
   end
@@ -72,7 +71,6 @@ def find_memo(public_id)
 end
 
 def write_memos_table(memos)
-  init_db_file
   File.open(db_path, 'w') do |file|
     JSON.dump(memos, file)
   end
@@ -104,3 +102,5 @@ helpers do
     nl2br(h(str))
   end
 end
+
+init_db_file if $PROGRAM_NAME == __FILE__
