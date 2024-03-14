@@ -6,7 +6,7 @@ require 'json'
 require 'securerandom'
 
 get '/memos' do
-  @memos = read_memos_table
+  @memos = read_memos
 
   erb :index
 end
@@ -16,10 +16,10 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  @memos = read_memos_table
+  @memos = read_memos
   public_id = SecureRandom.uuid
   @memos[public_id] = { public_id:, title: params[:title], content: params[:content] }
-  write_memos_table(@memos)
+  write_memos(@memos)
 
   redirect "/memos/#{public_id}"
 end
@@ -37,17 +37,17 @@ get '/memos/:public_id/edit' do
 end
 
 patch '/memos/:public_id' do
-  @memos = read_memos_table
+  @memos = read_memos
   @memos[params[:public_id].to_sym] = { public_id: params[:public_id], title: params[:title], content: params[:content] }
-  write_memos_table(@memos)
+  write_memos(@memos)
 
   redirect "/memos/#{params[:public_id]}"
 end
 
 delete '/memos/:public_id' do
-  @memos = read_memos_table
+  @memos = read_memos
   @memos.delete(params[:public_id].to_sym)
-  write_memos_table(@memos)
+  write_memos(@memos)
 
   redirect '/memos'
 end
@@ -56,21 +56,21 @@ not_found do
   '404 Not Found のページです'
 end
 
-def read_memos_table
+def read_memos
   File.open(db_path) do |file|
     JSON.parse(file.read, symbolize_names: true)
   end
 end
 
 def find_memo(public_id)
-  memos = read_memos_table
+  memos = read_memos
   memo = memos[public_id.to_sym]
   return not_found if memo.nil?
 
   memo
 end
 
-def write_memos_table(memos)
+def write_memos(memos)
   File.open(db_path, 'w') do |file|
     JSON.dump(memos, file)
   end

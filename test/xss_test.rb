@@ -21,7 +21,7 @@ class XssTest < Minitest::Test
         "content": '<script>alert(\'内容\')</script>'
       }
     }
-    write_memos_table(memos)
+    write_memos(memos)
   end
 
   def test_index

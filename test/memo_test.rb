@@ -26,7 +26,7 @@ class MemoTest < Minitest::Test
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
-    write_memos_table(memos)
+    write_memos(memos)
   end
 
   def test_index
@@ -99,10 +99,10 @@ class MemoTest < Minitest::Test
         "content": 'アールグレイ\nダージリン'
       }
     }
-    assert_equal expected_before, read_memos_table
+    assert_equal expected_before, read_memos
     SecureRandom.stub(:uuid, 'c1e3e3e3-8a66-4fc6-8609-a02f7fe0cf96') do
       post '/memos', { title: '紅茶', content: 'アールグレイ\nダージリン' }
-      assert_equal expected_after, read_memos_table
+      assert_equal expected_after, read_memos
       assert last_response.status, 302
     end
   end
@@ -132,9 +132,9 @@ class MemoTest < Minitest::Test
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
-    assert_equal expected_before, read_memos_table
+    assert_equal expected_before, read_memos
     patch '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96', { title: '買い物一覧', content: '焼きそばパン\nトマトジュース\nティッシュペーパー' }
-    assert_equal expected_after, read_memos_table
+    assert_equal expected_after, read_memos
     assert last_response.status, 302
   end
 
@@ -158,9 +158,9 @@ class MemoTest < Minitest::Test
         "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
-    assert_equal expected_before, read_memos_table
+    assert_equal expected_before, read_memos
     delete '/memos/a90cc4d4-8a66-4fc6-8609-a02f7fe0cf96'
-    assert_equal expected_after, read_memos_table
+    assert_equal expected_after, read_memos
     assert last_response.status, 302
   end
 end
