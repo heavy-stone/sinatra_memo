@@ -38,7 +38,7 @@ end
 
 patch '/memos/:public_id' do
   memos = read_memos
-  memos[params[:public_id].to_sym] = { public_id: params[:public_id], title: params[:title], content: params[:content] }
+  memos[params[:public_id].to_sym] = params.slice(:public_id, :title, :content)
   write_memos(memos)
 
   redirect "/memos/#{params[:public_id]}"
