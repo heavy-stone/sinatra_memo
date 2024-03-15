@@ -65,9 +65,7 @@ end
 def find_memo(public_id)
   memos = read_memos
   memo = memos[public_id]
-  return not_found if memo.nil?
-
-  memo
+  memo or not_found
 end
 
 def write_memos(memos)
