@@ -38,7 +38,7 @@ class MemoTest < Minitest::Test
   end
 
   def test_new
-    get '/memos/new', name: 'Frank'
+    get '/memos/new'
     assert last_response.status, 200
     assert_includes last_response.body, '保存'
   end
