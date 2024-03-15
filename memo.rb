@@ -38,7 +38,7 @@ end
 
 patch '/memos/:public_id' do
   memos = read_memos
-  memos[params[:public_id].to_sym] = params.slice(:public_id, :title, :content)
+  memos[params[:public_id]] = params.slice(:public_id, :title, :content)
   write_memos(memos)
 
   redirect "/memos/#{params[:public_id]}"
@@ -46,7 +46,7 @@ end
 
 delete '/memos/:public_id' do
   memos = read_memos
-  memos.delete(params[:public_id].to_sym)
+  memos.delete(params[:public_id])
   write_memos(memos)
 
   redirect '/memos'
@@ -58,13 +58,13 @@ end
 
 def read_memos
   File.open(db_path) do |file|
-    JSON.parse(file.read, symbolize_names: true)
+    JSON.parse(file.read)
   end
 end
 
 def find_memo(public_id)
   memos = read_memos
-  memo = memos[public_id.to_sym]
+  memo = memos[public_id]
   return not_found if memo.nil?
 
   memo

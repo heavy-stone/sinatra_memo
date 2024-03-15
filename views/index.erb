@@ -1,7 +1,7 @@
 <div class="mx-auto max-w-lg">
   <ul class="ml-4 list-disc">
     <% @memos.each do |key, value| %>
-      <li><a href="/memos/<%= value[:public_id] %>" class="text-lg font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-xl"><%= h(value[:title]) %></a></li>
+      <li><a href="/memos/<%= value['public_id'] %>" class="text-lg font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-xl"><%= h(value['title']) %></a></li>
     <% end %>
   </ul>
   <a href="/memos/new" class="mt-4 inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">追加</a>

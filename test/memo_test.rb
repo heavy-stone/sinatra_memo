@@ -15,15 +15,15 @@ class MemoTest < Minitest::Test
   def setup
     File.delete(TEST_DB_PATH) if File.exist?(TEST_DB_PATH)
     memos = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物リスト',
-        "content": 'トマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物リスト',
+        'content' => 'トマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     write_memos(memos)
@@ -71,32 +71,32 @@ class MemoTest < Minitest::Test
 
   def test_create
     expected_before = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物リスト',
-        "content": 'トマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物リスト',
+        'content' => 'トマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物リスト',
-        "content": 'トマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物リスト',
+        'content' => 'トマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       },
-      "new-uuid": {
-        "public_id": 'new-uuid',
-        "title": '紅茶',
-        "content": 'アールグレイ\nダージリン'
+      'new-uuid' => {
+        'public_id' => 'new-uuid',
+        'title' => '紅茶',
+        'content' => 'アールグレイ\nダージリン'
       }
     }
     assert_equal expected_before, read_memos
@@ -109,27 +109,27 @@ class MemoTest < Minitest::Test
 
   def test_update
     expected_before = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物リスト',
-        "content": 'トマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物リスト',
+        'content' => 'トマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物一覧',
-        "content": '焼きそばパン\nトマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物一覧',
+        'content' => '焼きそばパン\nトマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     assert_equal expected_before, read_memos
@@ -140,22 +140,22 @@ class MemoTest < Minitest::Test
 
   def test_delete
     expected_before = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '買い物リスト',
-        "content": 'トマトジュース\nティッシュペーパー'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '買い物リスト',
+        'content' => 'トマトジュース\nティッシュペーパー'
       },
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     expected_after = {
-      "test-uuid-2": {
-        "public_id": 'test-uuid-2',
-        "title": 'スクラム本',
-        "content": 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
+      'test-uuid-2' => {
+        'public_id' => 'test-uuid-2',
+        'title' => 'スクラム本',
+        'content' => 'SCRUM BOOT CAMP\nアジャイルプラクティスガイドブック'
       }
     }
     assert_equal expected_before, read_memos

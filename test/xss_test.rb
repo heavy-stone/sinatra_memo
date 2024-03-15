@@ -15,10 +15,10 @@ class XssTest < Minitest::Test
   def setup
     File.delete(TEST_DB_PATH) if File.exist?(TEST_DB_PATH)
     memos = {
-      "test-uuid-1": {
-        "public_id": 'test-uuid-1',
-        "title": '<script>alert(\'タイトル\')</script>',
-        "content": '<script>alert(\'内容\')</script>'
+      'test-uuid-1' => {
+        'public_id' => 'test-uuid-1',
+        'title' => '<script>alert(\'タイトル\')</script>',
+        'content' => '<script>alert(\'内容\')</script>'
       }
     }
     write_memos(memos)
