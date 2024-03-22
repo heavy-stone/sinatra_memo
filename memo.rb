@@ -64,8 +64,7 @@ end
 
 def find_memo(public_id)
   memos = read_memos
-  memo = memos[public_id]
-  memo or not_found
+  memos[public_id] or not_found
 end
 
 def write_memos(memos)
