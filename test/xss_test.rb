@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require 'rack/test'
+require 'pg'
 require_relative 'constants'
 require_relative '../memo'
 
@@ -13,15 +14,10 @@ class XssTest < Minitest::Test
   end
 
   def setup
-    File.delete(TEST_DB_PATH) if File.exist?(TEST_DB_PATH)
-    memos = {
-      'test-uuid-1' => {
-        'public_id' => 'test-uuid-1',
-        'title' => '<script>alert("タイトル")</script>',
-        'content' => '<script>alert("内容")</script>'
-      }
-    }
-    write_memos(memos)
+    DB.exec('DELETE FROM memos;')
+    DB.exec("SELECT SETVAL ('memos_id_seq', 1, false);")
+    memo = { public_id: 'test-uuid-1', title: '<script>alert("タイトル")</script>', content: '<script>alert("内容")</script>' }
+    create_memo(memo)
   end
 
   def test_index
