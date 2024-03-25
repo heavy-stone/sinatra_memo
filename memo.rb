@@ -62,7 +62,6 @@ def read_memos
 end
 
 def find_memo(public_id)
-  # DB.exec_params('SELECT * FROM memos WHERE public_id = $1', [public_id]).first or not_found
   DB.exec_prepared('find_memo', [public_id]).first or not_found
 end
 

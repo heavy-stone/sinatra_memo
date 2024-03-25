@@ -2,7 +2,6 @@
 
 require 'minitest/autorun'
 require 'rack/test'
-require 'pg'
 require_relative 'constants'
 require_relative '../memo'
 
