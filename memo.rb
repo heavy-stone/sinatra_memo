@@ -2,8 +2,13 @@
 
 require 'sinatra'
 require 'sinatra/reloader' if development?
-require 'json'
 require 'securerandom'
+require 'pg'
+
+preparing_db = PG.connect(dbname: ENV['APP_ENV'] == 'test' ? 'test' : 'development')
+preparing_db.type_map_for_results = PG::BasicTypeMapForResults.new preparing_db
+preparing_db.type_map_for_queries = PG::BasicTypeMapForQueries.new preparing_db
+DB = preparing_db
 
 get '/memos' do
   @memos = read_memos
@@ -16,10 +21,9 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  memos = read_memos
   public_id = SecureRandom.uuid
-  memos[public_id] = { public_id:, title: params[:title], content: params[:content] }
-  write_memos(memos)
+  memo = { public_id:, title: params[:title], content: params[:content] }
+  create_memo(memo)
 
   redirect "/memos/#{public_id}"
 end
@@ -37,17 +41,14 @@ get '/memos/:public_id/edit' do
 end
 
 patch '/memos/:public_id' do
-  memos = read_memos
-  memos[params[:public_id]] = params.slice(:public_id, :title, :content)
-  write_memos(memos)
+  memo = params.slice(:public_id, :title, :content)
+  update_memo(memo)
 
   redirect "/memos/#{params[:public_id]}"
 end
 
 delete '/memos/:public_id' do
-  memos = read_memos
-  memos.delete(params[:public_id])
-  write_memos(memos)
+  destroy_memo(params[:public_id])
 
   redirect '/memos'
 end
@@ -57,33 +58,31 @@ not_found do
 end
 
 def read_memos
-  File.open(db_path) do |file|
-    JSON.parse(file.read)
-  end
+  DB.exec('SELECT * FROM memos ORDER BY id')
 end
 
 def find_memo(public_id)
-  memos = read_memos
-  memos[public_id] or not_found
+  # DB.exec_params('SELECT * FROM memos WHERE public_id = $1', [public_id]).first or not_found
+  DB.exec_prepared('find_memo', [public_id]).first or not_found
 end
 
-def write_memos(memos)
-  File.open(db_path, 'w') do |file|
-    JSON.dump(memos, file)
-  end
+def create_memo(memo)
+  DB.exec_prepared('create_memo', [memo[:public_id], memo[:title], memo[:content]])
 end
 
-def db_path
-  db_file = ENV['APP_ENV'] == 'test' ? 'memos_test.json' : 'memos.json'
-  "./db/#{db_file}"
+def update_memo(memo)
+  DB.exec_prepared('update_memo', [memo[:title], memo[:content], memo[:public_id]])
 end
 
-def init_db_file
-  return if File.exist?(db_path)
+def destroy_memo(public_id)
+  DB.exec_prepared('destroy_memo', [public_id])
+end
 
-  File.open(db_path, 'w') do |file|
-    JSON.dump({}, file)
-  end
+def prepare_statements
+  DB.prepare('find_memo', 'SELECT * FROM memos WHERE public_id = $1')
+  DB.prepare('create_memo', 'INSERT INTO memos (public_id, title, content) VALUES ($1, $2, $3)')
+  DB.prepare('update_memo', 'UPDATE memos SET title = $1, content = $2 WHERE public_id = $3')
+  DB.prepare('destroy_memo', 'DELETE FROM memos WHERE public_id = $1')
 end
 
 helpers do
@@ -100,4 +99,4 @@ helpers do
   end
 end
 
-init_db_file if $PROGRAM_NAME == __FILE__
+prepare_statements
