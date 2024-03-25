@@ -36,17 +36,13 @@ development=# CREATE TABLE memos
   PRIMARY KEY (id)
 );
 ```
-テーブルの作成を確認する
-```
-development=# \dt
-```
 インデックスを作成する
 ```
 development=# CREATE INDEX index_public_id ON memos(public_id);
 ```
-インデックスの作成を確認する
+テーブルとインデックスの作成を確認する
 ```
-development=# \di
+development=# \d memos
 ```
 問題なければデータベースから抜ける
 ```
@@ -92,17 +88,13 @@ test=# CREATE TABLE memos
   PRIMARY KEY (id)
 );
 ```
-テーブルの作成を確認する
-```
-test=# \dt
-```
 インデックスを作成する
 ```
 test=# CREATE INDEX index_public_id ON memos(public_id);
 ```
-インデックスの作成を確認する
+テーブルとインデックスの作成を確認する
 ```
-test=# \di
+test=# \d memos
 ```
 問題なければデータベースから抜ける
 ```
